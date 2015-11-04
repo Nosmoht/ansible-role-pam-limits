@@ -1,0 +1,23 @@
+---
+- name: Check if configuration file exists
+  stat:
+    path: '{{ pam_limits_config_file_path }}/{{ item.filename | default(pam_limits_config_file_name) }}'
+  with_items: pam_limits_config
+  register: pam_config_file
+
+- name: Ensure configuration file
+  shell: 'touch {{ pam_limits_config_file_path }}/{{ item.1.filename | default(pam_limits_config_file_name) }}'
+  when: 'not {{ item.0.stat.exists}}'
+  with_together:
+  - pam_config_file.results
+  - pam_limits_config
+
+- name: Ensure configuration
+  lineinfile:
+    dest: '{{ pam_limits_config_file_path }}/{{ item.0.filename | default(pam_limits_config_file_name) }}'
+    regexp: ^#?{{ item.1.domain }}\s+{{ item.1.type }}\s+{{ item.1.item }}\s+.*$
+    line: "{{ item.1.domain }}\t{{ item.1.type }}\t{{ item.1.item }}\t{{ item.1.value }}"
+    state: present
+  with_subelements:
+  - pam_limits_config
+  - parameters
