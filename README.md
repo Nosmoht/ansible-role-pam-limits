@@ -23,6 +23,9 @@ Ensure file /etc/security/limits.d/10-gcr.conf and and /etc/security/limits.d/99
 exist and have the right configuration.
 ```yaml
 - hosts: oracle-server
+  become: true
+  become_method: sudo
+  become_user: root
   vars:
     pam_limits_config:
     - filename: 10-gcr.conf
@@ -37,4 +40,6 @@ exist and have the right configuration.
         type: '-'
         item: rtprio
         value: 99
+  roles:
+  - role: pam-limits
 ```
