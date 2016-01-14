@@ -1,6 +1,7 @@
 Ansible role pam-limits
 ==========
 - [Introduction](#introduction)
+- [Requirements](#requirements)
 - [Variables](#variables)
 - [Usage](#usage)
 
@@ -10,6 +11,9 @@ By default, if __pam_limits_config__ is not an empty list, all configuration
 items will be saved in __pam_limits_config_file_path__/__pam_limits_config_file_name__ which is /etc/security/limits.d/99-ansible.conf. One can define separate files for items.
 See examples bellow on how to do that. If the configration file does not exist
 it will be created.
+
+# Requirements
+Ansible => 2.0
 
 # Variables
 | Name | Description | Default |
